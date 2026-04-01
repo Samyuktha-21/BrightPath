@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrightPath - Exam Calendar</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="dashboard-nav">
+            <div class="logo">BrightPath Calendar</div>
+            <a href="dashboard.html" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 1rem; background: rgba(255,255,255,0.2); color: white;">Back to Dashboard</a>
+        </nav>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <button id="prev-month" class="filter-btn">◄ Previous</button>
+            <h2 id="month-year-display" style="font-size: 2rem; font-weight: 300;">Month Year</h2>
+            <button id="next-month" class="filter-btn">Next ►</button>
+        </div>
+
+        <div class="calendar-grid">
+            <div class="calendar-day-header">Sun</div>
+            <div class="calendar-day-header">Mon</div>
+            <div class="calendar-day-header">Tue</div>
+            <div class="calendar-day-header">Wed</div>
+            <div class="calendar-day-header">Thu</div>
+            <div class="calendar-day-header">Fri</div>
+            <div class="calendar-day-header">Sat</div>
+        </div>
+        <div id="calendar-days" class="calendar-grid">
+            <!-- Days injected via JS -->
+        </div>
+    </div>
+    
+    <!-- Modal for showing exams on a specific day -->
+    <div id="exam-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center;">
+        <div style="background: var(--primary-color); padding: 2rem; border-radius: 16px; max-width: 500px; width: 90%; position: relative; border: 1px solid var(--card-border);">
+            <button id="close-modal" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: white; cursor: pointer;">&times;</button>
+            <h3 id="modal-date" style="margin-bottom: 1rem; color: var(--accent-color);">Date</h3>
+            <div id="modal-content" style="display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="calendar.js"></script>
+</body>
+</html>

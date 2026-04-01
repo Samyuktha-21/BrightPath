@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BrightPath | Exam Opportunity Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!--WELCOME PAGE -->
+<section id="welcome">
+    <h1>BrightPath</h1>
+    <p class="tagline">Discover exams. Grab opportunities.</p>
+    <p id="quote"></p>
+    <button onclick="enterDashboard()">Get Started</button>
+</section>
+
+<!--DASHBOARD PAGE-->
+<section id="dashboard">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">BrightPath</div>
+        <button onclick="showLoginAlert()">Login</button>
+    </nav>
+
+    <!-- Header -->
+    <header class="main-header">
+        <h2>Exam Dashboard</h2>
+        <p>One place. Many opportunities.</p>
+    </header>
+
+    <!-- Search -->
+    <section class="search-section">
+        <input type="text" placeholder="Search exams like NEET, JEE, UPSC...">
+    </section>
+
+    <!-- Category Filter -->
+    <section class="filter-section">
+        <button onclick="filterCategory('all')">All</button>
+        <button onclick="filterCategory('medical')">Medical</button>
+        <button onclick="filterCategory('engineering')">Engineering</button>
+        <button onclick="filterCategory('government')">Government</button>
+        <button onclick="filterCategory('management')">Management</button>
+        <button onclick="filterCategory('entrance')">Entrance</button>
+    </section>
+
+    <!--Updates-->
+    <section class="updates-section">
+        <div class="updates-track">
+            <span>🔔 JEE Main 2026 registration opens soon</span>
+            <span>🆕 NEET UG exam date announced</span>
+            <span>📢 UPSC CSE notification released</span>
+            <span>📝 CUET UG applications open</span>
+        </div>
+    </section>
+
+    <!-- Exams -->
+    <section class="exam-container">
+        <h3> Upcoming Exams</h3>
+
+        <div class="exam-card" data-category="engineering">
+            <h4>JEE Main</h4>
+            <p>Engineering</p>
+            <p>April 2026</p>
+            <a href="https://jeemain.nta.nic.in/">Official Website</a>
+        </div>
+
+        <div class="exam-card" data-category="medical">
+            <h4>NEET UG</h4>
+            <p>Medical</p>
+            <p>May 2026</p>
+            <a href="https://neet.nta.nic.in/">Official Website</a>
+        </div>
+
+        <div class="exam-card" data-category="government">
+            <h4>UPSC CSE</h4>
+            <p>Government</p>
+            <p>June 2026</p>
+            <a href="https://upsc.gov.in/examinations/active-exams">Official Website</a>
+        </div>
+
+        <div class="exam-card" data-category="entrance">
+            <h4>CUET UG</h4>
+            <p>University Entrance</p>
+            <p>May 2026</p>
+            <a href="https://cuet.nta.nic.in/">Official Website</a>
+        </div>
+
+        <div class="exam-card" data-category="government">
+            <h4>SSC CGL</h4>
+            <p>Government</p>
+            <p>July 2026</p>
+            <a href="https://ssc.gov.in/for-candidates/cgl-exam/xsd91hjkshdk92xk">Official Website</a>
+        </div>
+
+        <div class="exam-card" data-category="management">
+            <h4>CAT</h4>
+            <p>Management</p>
+            <p>November 2026</p>
+            <a href="https://iimcat.ac.in/per/g06/pub/32842/ASM/WebPortal/1/index.html?32842@@1@@1">Official Website</a>
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            Dates are subject to change. Please verify on official websites.
+        </p>
+    </footer>
+
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>

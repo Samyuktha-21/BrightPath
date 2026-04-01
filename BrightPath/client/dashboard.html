@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrightPath - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <nav class="dashboard-nav">
+            <div class="logo">BrightPath</div>
+            <button class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 1rem;">Login</button>
+        </nav>
+
+        <div class="marquee-container">
+            <div class="marquee-content" id="updates-marquee">
+                <!-- Updates will be loaded here -->
+                Loading latest updates...
+            </div>
+        </div>
+
+        <!-- NEW: Analytics Dashboard Container -->
+        <div id="analytics-dashboard" class="analytics-dashboard" style="display: none;">
+            <!-- Analytics will be injected here if user is logged in -->
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+            <a href="calendar.html" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 1rem; background: var(--accent-color); color: #000;">📅 View Exam Calendar</a>
+        </div>
+
+        <div class="controls-section">
+            <input type="text" id="search-input" class="search-bar" placeholder="Search exams...">
+            <div id="category-filters" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="filter-btn active" data-category="All">All</button>
+                <button class="filter-btn" data-category="Medical">Medical</button>
+                <button class="filter-btn" data-category="Engineering">Engineering</button>
+                <button class="filter-btn" data-category="Government">Government</button>
+                <button class="filter-btn" data-category="Management">Management</button>
+                <button class="filter-btn" data-category="Saved"
+                    style="border-color: var(--accent-color); color: var(--accent-color);">★ Saved</button>
+            </div>
+        </div>
+
+        <div id="exams-grid" class="exams-grid">
+            <!-- Exam cards will be injected here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer
+        style="text-align: center; padding: 2rem; margin-top: 2rem; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+        <p>&copy; 2026 BrightPath.</p>
+        <div style="margin-top: 0.5rem; display: flex; justify-content: center; gap: 1.5rem;">
+            <a href="about.html" style="color: white; text-decoration: none; opacity: 0.8;">About Us</a>
+            <a href="disclaimer.html" style="color: white; text-decoration: none; opacity: 0.8;">Disclaimer</a>
+            <a href="contact.html" style="color: white; text-decoration: none; opacity: 0.8;">Contact</a>
+        </div>
+    </footer>
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

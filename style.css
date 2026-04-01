@@ -1,0 +1,153 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+/*WELCOME*/
+#welcome {
+    height: 100vh;
+    background-image:
+        linear-gradient(135deg, #667eea, #764ba2, #6dd5ed),
+        url("https://www.transparenttextures.com/patterns/cubes.png");
+    background-size: 300% 300%, auto;
+    background-blend-mode: overlay;
+    animation: gradientMove 100s linear infinite;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+#welcome h1 {
+    font-size: 60px;
+}
+
+#welcome button {
+    padding: 12px 30px;
+    border-radius: 25px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/*DASHBOARD part*/
+#dashboard {
+    display: none;
+    background: linear-gradient(to right, #e3f2fd, #ffffff);
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 30px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 22px;
+    color: #4a6cf7;
+}
+
+.navbar button {
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    background: #4a6cf7;
+    color: white;
+    cursor: pointer;
+}
+
+/* Header */
+.main-header {
+    text-align: center;
+    padding: 30px;
+}
+
+/* Search */
+.search-section {
+    text-align: center;
+}
+
+.search-section input {
+    width: 60%;
+    padding: 12px;
+}
+
+/* Filters */
+.filter-section {
+    text-align: center;
+    margin: 20px;
+}
+
+.filter-section button {
+    margin: 5px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    background-color: #4a6cf7;
+    color: white;
+}
+
+/* Updates ticker */
+.updates-section {
+    background: #fff3cd;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 15px;
+}
+
+.updates-track {
+    display: inline-block;
+    animation: scrollLeft 25s linear infinite;
+}
+
+.updates-track span {
+    margin-right: 50px;
+    font-weight: bold;
+}
+
+@keyframes scrollLeft {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* Exams */
+.exam-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.exam-card {
+    display: inline-block;
+    width: 220px;
+    background: white;
+    margin: 15px;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #f1f1f1;
+}
+
+li:nth-child(3n){
+    background-color: powderblue;
+}
+li:nth-child(2n){
+    background-color: pink;
+}
+
