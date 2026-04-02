@@ -20,6 +20,9 @@ mongoose.connect(MONGODB_URI)
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.error('MongoDB Connection Error:', err));
 
+// Initialize Background Automation (Cron Jobs for Notifications)
+const startCronJobs = require('./cron/notifications');
+startCronJobs();
 
 const examsRoute = require('./routes/exams');
 const updatesRoute = require('./routes/updates');
