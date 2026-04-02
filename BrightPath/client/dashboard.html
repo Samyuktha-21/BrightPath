@@ -13,8 +13,13 @@
     <div class="dashboard-container">
         <nav class="dashboard-nav">
             <div class="logo">BrightPath</div>
-            <button class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 1rem;">Login</button>
+            <button class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 1rem;" onclick="window.location.href='login.html'">Login</button>
         </nav>
+
+        <!-- Personalized Greeting -->
+        <div id="greeting-section" style="display: none; margin: 1.5rem 0 1rem 0;">
+            <h1 id="user-greeting" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.3rem;"></h1>
+        </div>
 
         <div class="marquee-container">
             <div class="marquee-content" id="updates-marquee">
@@ -28,7 +33,8 @@
             <!-- Analytics will be injected here if user is logged in -->
         </div>
 
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+            <a href="community.html" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 1rem; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none; color: #000; font-weight: 700; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);">💬 Global Community Hub</a>
             <a href="calendar.html" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 1rem; background: var(--accent-color); color: #000;">📅 View Exam Calendar</a>
         </div>
 

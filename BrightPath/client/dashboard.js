@@ -27,11 +27,19 @@ if (userStr) {
         userProfile.style.gap = '1rem';
 
         userProfile.innerHTML = `
-            <span style="font-weight: 600;">Welcome, ${user.name}</span>
+            <span style="font-weight: 600; display: none;" id="nav-username">Welcome, ${user.name}</span>
             <button id="logout-btn" class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: rgba(255,255,255,0.2); color: white;">Logout</button>
         `;
 
         navContainer.appendChild(userProfile);
+
+        // Activate giant greeting
+        const greetingSection = document.getElementById('greeting-section');
+        const userGreeting = document.getElementById('user-greeting');
+        if (greetingSection && userGreeting) {
+            greetingSection.style.display = 'block';
+            userGreeting.innerHTML = `Welcome back, <span style="color: var(--accent-color);">${user.name}</span>! 👋`;
+        }
 
         // Logout Logic
         document.getElementById('logout-btn').addEventListener('click', () => {

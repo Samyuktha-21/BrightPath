@@ -21,14 +21,15 @@ mongoose.connect(MONGODB_URI)
     .catch(err => console.error('MongoDB Connection Error:', err));
 
 
-// Routes
 const examsRoute = require('./routes/exams');
 const updatesRoute = require('./routes/updates');
 const authRoute = require('./routes/auth');
+const commentsRoute = require('./routes/comments');
 
 app.use('/api/exams', examsRoute);
 app.use('/api/updates', updatesRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/comments', commentsRoute);
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/index.html'));
