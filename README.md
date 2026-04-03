@@ -193,7 +193,7 @@ The goal of BrightPath is to eliminate the hassle of tracking multiple competiti
 ## 👩‍💻 Author
 
 **Samyuktha**  
-College Project — Full Stack Web Development  
+College Project 
 
 ---
 
