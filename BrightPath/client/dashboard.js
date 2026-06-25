@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api'; // Adjust if port is different
+const API_BASE_URL = '/api'; // Relative path — works both locally and on Vercel
 
 const examsGrid = document.getElementById('exams-grid');
 const searchInput = document.getElementById('search-input');
