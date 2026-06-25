@@ -214,11 +214,14 @@ async function fetchUpdates() {
         const res = await fetch(`${API_BASE_URL}/updates`);
         const updates = await res.json();
         const items = (updates && updates.length) ? updates : [{ text: 'Welcome to BrightPath — track every exam that matters.' }];
-        announcementsEl.innerHTML = items.map(u =>
+        const pills = items.map(u =>
             `<span class="announce-pill"><span class="dot"></span>${escapeHtml(u.text)}</span>`
         ).join('');
+        // duplicated so the ticker loops seamlessly (translateX(-50%))
+        announcementsEl.innerHTML = pills + pills;
     } catch (e) {
-        announcementsEl.innerHTML = `<span class="announce-pill"><span class="dot"></span>Welcome to BrightPath</span>`;
+        const pill = `<span class="announce-pill"><span class="dot"></span>Welcome to BrightPath</span>`;
+        announcementsEl.innerHTML = pill + pill;
     }
 }
 

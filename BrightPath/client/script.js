@@ -1,25 +1,37 @@
+// Landing page — rotating motivational quotes with a smooth fade.
 const quotes = [
     "Success involves a lot of preparation.",
     "The future belongs to those who believe in the beauty of their dreams.",
     "Don't watch the clock; do what it does. Keep going.",
     "The secret of getting ahead is getting started.",
     "It always seems impossible until it is done.",
-    "Your limitation—it's only your imagination."
+    "Your limitation—it's only your imagination.",
+    "Great things never come from comfort zones.",
+    "Push yourself, because no one else is going to do it for you.",
+    "Dream big. Start small. Act now.",
+    "The expert in anything was once a beginner."
 ];
 
-const quoteElement = document.getElementById('motivational-quote');
-const getStartedBtn = document.getElementById('get-started-btn');
+const quoteBox = document.getElementById('quote-box');
+const quoteEl = document.getElementById('motivational-quote');
 
-function setRandomQuote() {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    quoteElement.textContent = `"${quotes[randomIndex]}"`;
+// Start on a random quote so it feels fresh on every visit.
+let index = Math.floor(Math.random() * quotes.length);
+
+function showQuote() {
+    if (quoteEl) quoteEl.textContent = quotes[index];
 }
 
-// Set quote on load
-setRandomQuote();
+showQuote();
 
-// Navigate to dashboard
-getStartedBtn.addEventListener('click', () => {
-    // Add a simple fade-out effect if desired, or just navigate
-    window.location.href = 'dashboard.html';
-});
+// Rotate every 4.5s with a fade-out / fade-in transition.
+if (quoteBox && quoteEl) {
+    setInterval(() => {
+        quoteBox.classList.add('fade');          // fade out
+        setTimeout(() => {
+            index = (index + 1) % quotes.length;  // next quote
+            showQuote();
+            quoteBox.classList.remove('fade');    // fade back in
+        }, 400);
+    }, 4500);
+}

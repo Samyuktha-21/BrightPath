@@ -4,42 +4,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BrightPath - Grab the Opportunity</title>
+    <title>BrightPath — Grab the Opportunity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .lp-page {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* subtle dotted texture with a slow drift + warm radial glow */
+        .lp-page::before {
+            content: "";
+            position: absolute;
+            inset: -40px;
+            background-image: radial-gradient(var(--card-border) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.55;
+            -webkit-mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 75%);
+            mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 75%);
+            z-index: 0;
+            animation: gridDrift 40s linear infinite;
+        }
+        @keyframes gridDrift {
+            from { transform: translate(0, 0); }
+            to { transform: translate(24px, 24px); }
+        }
+
+        .lp-topbar { height: 3px; background: var(--primary-color); position: relative; z-index: 2; }
+
+        .lp-nav {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.4rem 1.5rem;
+        }
+        .lp-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; color: var(--primary-color); text-decoration: none; }
+        .lp-logo span { color: var(--warm); }
+
+        .lp-hero {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1.5rem 3rem;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .lp-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.4rem 0.9rem;
+            background: var(--accent-soft);
+            color: var(--primary-color);
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 1.6rem;
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards;
+        }
+
+        .lp-title {
+            font-size: clamp(3rem, 9vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            color: var(--text-color);
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.08s forwards;
+        }
+        .lp-title span { color: var(--primary-color); }
+        .lp-title .dot { color: var(--warm); }
+
+        .lp-tagline {
+            font-size: clamp(1.3rem, 3.5vw, 1.9rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-top: 1.1rem;
+            color: var(--text-color);
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.16s forwards;
+        }
+        .lp-tagline strong { color: var(--warm); }
+
+        .lp-sub {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 540px;
+            margin: 1rem auto 0;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.24s forwards;
+        }
+
+        /* Fixed-size quote card so it never resizes as quotes change */
+        .lp-quote {
+            position: relative;
+            margin: 2.2rem auto 0;
+            width: 540px;
+            max-width: 100%;
+            height: 104px;
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.4rem 1rem 2.8rem;
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-left: 3px solid var(--primary-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            text-align: left;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.32s forwards;
+        }
+        .lp-quote-mark {
+            position: absolute;
+            left: 0.85rem;
+            top: 0.5rem;
+            font-size: 2.6rem;
+            line-height: 1;
+            color: var(--primary-color);
+            opacity: 0.25;
+            font-family: Georgia, serif;
+        }
+        .lp-quote p {
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+            color: #20202f;
+            margin: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .lp-quote.fade p { opacity: 0; transform: translateY(6px); }
+
+        .lp-actions {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.6s ease 0.4s forwards;
+        }
+        .lp-cta { font-size: 1.05rem; padding: 0.85rem 2rem; }
+
+        .lp-footer {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .lp-footer .links { display: flex; justify-content: center; gap: 1.4rem; flex-wrap: wrap; }
+        .lp-footer a { color: var(--text-muted); text-decoration: none; }
+        .lp-footer a:hover { color: var(--primary-color); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .lp-page::before { animation: none; }
+        }
+    </style>
 </head>
 
 <body>
-    <div class="welcome-container">
-        <header>
-            <div class="logo">BrightPath</div>
-        </header>
+    <div class="lp-page">
+        <div class="lp-topbar"></div>
 
-        <main class="hero-section">
-            <h1 class="tagline">Discover exams. <span class="highlight">Grab opportunities.</span></h1>
-            <div class="quote-container">
-                <p id="motivational-quote">"Success involves a lot of preparation."</p>
+        <nav class="lp-nav">
+            <a href="index.html" class="lp-logo">Bright<span>Path</span></a>
+            <a href="login.html" class="btn-ghost">Login</a>
+        </nav>
+
+        <main class="lp-hero">
+            <span class="lp-eyebrow">✦ Your personal exam companion</span>
+
+            <h1 class="lp-title">Bright<span>Path</span><span class="dot">.</span></h1>
+
+            <p class="lp-tagline">Discover exams. <strong>Grab opportunities.</strong></p>
+
+            <p class="lp-sub">
+                One calm place to track entrance, government and competitive exam dates across
+                India — with live countdowns, saved exams, a calendar view and a student community.
+            </p>
+
+            <div class="lp-quote" id="quote-box">
+                <span class="lp-quote-mark">&ldquo;</span>
+                <p id="motivational-quote">Success involves a lot of preparation.</p>
             </div>
-            <button id="get-started-btn" class="cta-button">Get Started</button>
+
+            <div class="lp-actions">
+                <a href="dashboard.html" class="cta-button lp-cta">Get Started →</a>
+                <a href="calendar.html" class="btn-ghost" style="padding:0.85rem 1.6rem;">View calendar</a>
+            </div>
         </main>
 
-        <div class="background-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-        </div>
+        <footer class="lp-footer">
+            <div class="links">
+                <a href="about.html">About</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </footer>
     </div>
 
     <script src="script.js"></script>
-
-    <!-- Footer -->
-    <footer
-        style="position: absolute; bottom: 1rem; width: 100%; text-align: center; color: var(--text-muted); font-size: 0.9rem; z-index: 2;">
-        <div style="display: flex; justify-content: center; gap: 1.5rem;">
-            <a href="about.html" style="color: var(--text-muted); text-decoration: none;">About Us</a>
-            <a href="disclaimer.html" style="color: var(--text-muted); text-decoration: none;">Disclaimer</a>
-            <a href="contact.html" style="color: var(--text-muted); text-decoration: none;">Contact</a>
-        </div>
-    </footer>
 </body>
 
 </html>
