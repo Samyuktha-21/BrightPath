@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 5000;
 // i.e. local dev or a traditional host — NOT on serverless platforms like Vercel.
 const startCronJobs = require('./cron/notifications');
 startCronJobs();
-
+require('./seed/seedExams');
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
