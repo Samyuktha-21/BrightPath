@@ -14,9 +14,9 @@ const sendOffAppNotification = (user, exam, daysLeft) => {
 };
 
 const startCronJobs = () => {
-    // Schedule task to run every 1 minute FOR DEMONSTRATION!
-    // In a real production environment, you would use '0 8 * * *' (Every day at 8:00 AM)
-    cron.schedule('*/2 * * * *', async () => {
+    // Runs every day at 08:00 server time. (For local testing you can temporarily
+    // switch to '*/2 * * * *' to fire every 2 minutes.)
+    cron.schedule('0 8 * * *', async () => {
         console.log('⏳ CRON: Scanning database for upcoming exam deadlines...');
 
         if (mongoose.connection.readyState !== 1) {

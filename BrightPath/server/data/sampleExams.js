@@ -1,171 +1,102 @@
 // Single source of truth for exam data.
-// Used both by the DB seed script (server/seed/seedExams.js) and as the
-// in-memory fallback in the exams route (server/routes/exams.js).
+// Used by the DB seed script (server/seed/seedExams.js), the scraper's fallback
+// (server/scraper/examScraper.js), and the in-memory fallback in server/routes/exams.js.
 //
-// Dates verified against official sources / latest notifications as of June 2026.
-// `isTentative: true` means the date is NOT yet officially announced and is the
-// expected window based on the conducting body's past cycles — show it as provisional.
+// Honesty rules (date as of June 2026):
+//   isVerified : true  -> exam date confirmed against an official source this build.
+//   isTentative: true  -> date NOT yet officially announced; expected window from past cycles.
+//   isRolling  : true  -> year-round exam with no single date (GRE/GMAT/TOEFL/IELTS).
+// Past 2026 cycles have been advanced to their next sitting. Nothing here is a
+// fabricated "confirmed" date — unconfirmed entries are flagged tentative/unverified.
 
-const placeholderNotes = [{ title: 'Sets, Relations and Functions', link: 'materials/notes.png', type: 'Notes' }];
+const now = () => new Date();
+
+// helper to keep entries terse
+const exam = (o) => ({
+    materials: [],
+    isVerified: false,
+    isTentative: true,
+    isRolling: false,
+    lastUpdated: now(),
+    ...o
+});
 
 const sampleExams = [
-    // ---------------- Medical ----------------
-    {
-        name: 'NEET UG 2027', category: 'Medical', conductingBody: 'NTA',
-        examDate: new Date('2027-05-02'),
-        registrationDates: { start: new Date('2027-02-01'), end: new Date('2027-03-07') },
-        examLevel: 'National', websiteUrl: 'https://neet.nta.nic.in/',
-        description: 'National Eligibility cum Entrance Test for MBBS/BDS courses.',
-        materials: placeholderNotes, isTentative: true
-    },
-    {
-        name: 'NEET PG 2026', category: 'Medical', conductingBody: 'NBEMS',
-        examDate: new Date('2026-08-30'),
-        registrationDates: { start: new Date('2026-07-01'), end: new Date('2026-07-21') },
-        examLevel: 'National', websiteUrl: 'https://nbe.edu.in/',
-        description: 'Eligibility-cum-ranking examination for Post Graduate Medical courses. Date officially scheduled by NBEMS.',
-        materials: placeholderNotes, isTentative: false
-    },
-    {
-        name: 'AIIMS INI-CET (Jan 2027 Session)', category: 'Medical', conductingBody: 'AIIMS New Delhi',
-        examDate: new Date('2026-11-08'),
-        registrationDates: { start: new Date('2026-09-01'), end: new Date('2026-10-10') },
-        examLevel: 'National', websiteUrl: 'https://www.aiimsexams.ac.in/',
-        description: 'Institute of National Importance Combined Entrance Test (January 2027 admission session).',
-        materials: placeholderNotes, isTentative: true
-    },
+    // ==================== ENGINEERING ====================
+    exam({ name: 'JEE Main 2027 (Session 1)', category: 'Engineering', conductingBody: 'NTA', examDate: new Date('2027-01-24'), registrationDates: { start: new Date('2026-11-01'), end: new Date('2026-11-30') }, examLevel: 'National', websiteUrl: 'https://jeemain.nta.nic.in/', description: 'Joint Entrance Examination (Main) for admission to NITs, IIITs and GFTIs, and the qualifier for JEE Advanced.' }),
+    exam({ name: 'JEE Advanced 2027', category: 'Engineering', conductingBody: 'IITs', examDate: new Date('2027-05-16'), registrationDates: { start: new Date('2027-04-30'), end: new Date('2027-05-07') }, examLevel: 'National', websiteUrl: 'https://jeeadv.ac.in/', description: 'Entrance exam for admission to the Indian Institutes of Technology (IITs). Conducted by a rotating IIT each year.' }),
+    exam({ name: 'BITSAT 2027', category: 'Engineering', conductingBody: 'BITS Pilani', examDate: new Date('2027-05-20'), registrationDates: { start: new Date('2027-01-15'), end: new Date('2027-04-10') }, examLevel: 'University', websiteUrl: 'https://www.bitsadmission.com/', description: 'Computer-based admission test for the integrated first-degree programmes at BITS Pilani, Goa and Hyderabad campuses.' }),
+    exam({ name: 'VITEEE 2027', category: 'Engineering', conductingBody: 'VIT', examDate: new Date('2027-04-19'), registrationDates: { start: new Date('2026-11-01'), end: new Date('2027-03-31') }, examLevel: 'University', websiteUrl: 'https://viteee.vit.ac.in/', description: 'VIT Engineering Entrance Examination for B.Tech admission across VIT campuses.' }),
+    exam({ name: 'SRMJEEE 2027', category: 'Engineering', conductingBody: 'SRM IST', examDate: new Date('2027-04-15'), registrationDates: { start: new Date('2026-11-15'), end: new Date('2027-04-05') }, examLevel: 'University', websiteUrl: 'https://www.srmist.edu.in/', description: 'SRM Joint Engineering Entrance Examination for B.Tech admission to SRM Institute of Science and Technology.' }),
+    exam({ name: 'MET 2027 (Manipal)', category: 'Engineering', conductingBody: 'MAHE Manipal', examDate: new Date('2027-04-15'), registrationDates: { start: new Date('2026-11-01'), end: new Date('2027-03-31') }, examLevel: 'University', websiteUrl: 'https://manipal.edu/mu/admission.html', description: 'Manipal Entrance Test for B.Tech admission to Manipal Academy of Higher Education campuses.' }),
+    exam({ name: 'COMEDK UGET 2027', category: 'Engineering', conductingBody: 'COMEDK', examDate: new Date('2027-05-09'), registrationDates: { start: new Date('2027-02-01'), end: new Date('2027-04-20') }, examLevel: 'State', websiteUrl: 'https://www.comedk.org/', description: 'Consortium of Medical, Engineering and Dental Colleges of Karnataka undergraduate entrance test for private colleges in Karnataka.' }),
+    exam({ name: 'KCET 2027', category: 'Engineering', conductingBody: 'Karnataka Examinations Authority', examDate: new Date('2027-04-17'), registrationDates: { start: new Date('2027-02-01'), end: new Date('2027-03-15') }, examLevel: 'State', websiteUrl: 'https://cetonline.karnataka.gov.in/kea/', description: 'Karnataka Common Entrance Test for engineering, agriculture and allied course admissions in Karnataka state colleges.' }),
+    exam({ name: 'MHT-CET 2027', category: 'Engineering', conductingBody: 'Maharashtra CET Cell', examDate: new Date('2027-04-20'), registrationDates: { start: new Date('2027-01-15'), end: new Date('2027-03-15') }, examLevel: 'State', websiteUrl: 'https://cetcell.mahacet.org/', description: 'Maharashtra Common Entrance Test for engineering and pharmacy admissions in Maharashtra.' }),
+    exam({ name: 'WBJEE 2027', category: 'Engineering', conductingBody: 'WBJEEB', examDate: new Date('2027-04-25'), registrationDates: { start: new Date('2026-12-15'), end: new Date('2027-02-15') }, examLevel: 'State', websiteUrl: 'https://wbjeeb.nic.in/', description: 'West Bengal Joint Entrance Examination for engineering and pharmacy admissions in West Bengal.' }),
+    exam({ name: 'AP EAPCET 2027', category: 'Engineering', conductingBody: 'JNTU Kakinada / APSCHE', examDate: new Date('2027-05-15'), registrationDates: { start: new Date('2027-03-01'), end: new Date('2027-04-20') }, examLevel: 'State', websiteUrl: 'https://cets.apsche.ap.gov.in/', description: 'Andhra Pradesh Engineering, Agriculture and Pharmacy Common Entrance Test (formerly AP EAMCET).' }),
+    exam({ name: 'TS EAPCET 2027', category: 'Engineering', conductingBody: 'JNTU Hyderabad / TGCHE', examDate: new Date('2027-05-05'), registrationDates: { start: new Date('2027-03-01'), end: new Date('2027-04-15') }, examLevel: 'State', websiteUrl: 'https://eapcet.tgche.ac.in/', description: 'Telangana Engineering, Agriculture and Pharmacy Common Entrance Test (formerly TS EAMCET).' }),
+    exam({ name: 'GATE 2027', category: 'Engineering', conductingBody: 'IIT Madras', examDate: new Date('2027-02-06'), registrationDates: { start: new Date('2026-08-28'), end: new Date('2026-09-30') }, examLevel: 'National', websiteUrl: 'https://gate.iitm.ac.in/', description: 'Graduate Aptitude Test in Engineering — for M.Tech/PhD admissions and PSU recruitment. Conducted by IIT Madras for the 2027 cycle.' }),
 
-    // ---------------- Engineering ----------------
-    {
-        name: 'JEE Main 2027 (Session 1)', category: 'Engineering', conductingBody: 'NTA',
-        examDate: new Date('2027-01-24'),
-        registrationDates: { start: new Date('2026-11-01'), end: new Date('2026-11-30') },
-        examLevel: 'National', websiteUrl: 'https://jeemain.nta.ac.in/',
-        description: 'Joint Entrance Examination Main for NITs, IIITs and GFTIs.',
-        materials: placeholderNotes, isTentative: true
-    },
-    {
-        name: 'JEE Advanced 2027', category: 'Engineering', conductingBody: 'IITs',
-        examDate: new Date('2027-05-16'),
-        registrationDates: { start: new Date('2027-04-30'), end: new Date('2027-05-07') },
-        examLevel: 'National', websiteUrl: 'https://jeeadv.ac.in/',
-        description: 'Entrance exam for Indian Institutes of Technology (IITs).',
-        materials: placeholderNotes, isTentative: true
-    },
-    {
-        name: 'GATE 2027', category: 'Engineering', conductingBody: 'IIT Madras',
-        examDate: new Date('2027-02-06'),
-        registrationDates: { start: new Date('2026-08-28'), end: new Date('2026-09-30') },
-        examLevel: 'National', websiteUrl: 'https://gate.iitm.ac.in/',
-        description: 'Graduate Aptitude Test in Engineering — for M.Tech admissions and PSU recruitment. Conducted by IIT Madras for 2027.',
-        materials: [], isTentative: true
-    },
-    {
-        name: 'BITSAT 2027', category: 'Engineering', conductingBody: 'BITS Pilani',
-        examDate: new Date('2027-05-20'),
-        registrationDates: { start: new Date('2027-01-15'), end: new Date('2027-04-10') },
-        examLevel: 'University', websiteUrl: 'https://www.bitsadmission.com/',
-        description: 'BITS Pilani Admission Test.',
-        materials: placeholderNotes, isTentative: true
-    },
-    {
-        name: 'VITEEE 2027', category: 'Engineering', conductingBody: 'VIT',
-        examDate: new Date('2027-04-19'),
-        registrationDates: { start: new Date('2026-11-01'), end: new Date('2027-03-31') },
-        examLevel: 'University', websiteUrl: 'https://viteee.vit.ac.in/',
-        description: 'VIT Engineering Entrance Examination.',
-        materials: placeholderNotes, isTentative: true
-    },
-    {
-        name: 'SRMJEEE 2027', category: 'Engineering', conductingBody: 'SRM IST',
-        examDate: new Date('2027-04-15'),
-        registrationDates: { start: new Date('2026-11-15'), end: new Date('2027-04-05') },
-        examLevel: 'University', websiteUrl: 'https://www.srmist.edu.in/',
-        description: 'SRM Joint Engineering Entrance Examination.',
-        materials: placeholderNotes, isTentative: true
-    },
+    // ==================== MEDICAL ====================
+    exam({ name: 'NEET UG 2027', category: 'Medical', conductingBody: 'NTA', examDate: new Date('2027-05-02'), registrationDates: { start: new Date('2027-02-01'), end: new Date('2027-03-07') }, examLevel: 'National', websiteUrl: 'https://neet.nta.nic.in/', description: 'National Eligibility cum Entrance Test (UG) — single entrance for MBBS, BDS, AYUSH and allied medical courses.' }),
+    exam({ name: 'NEET PG 2026', category: 'Medical', conductingBody: 'NBEMS', examDate: new Date('2026-08-30'), registrationDates: { start: new Date('2026-07-01'), end: new Date('2026-07-21') }, examLevel: 'National', websiteUrl: 'https://nbe.edu.in/', description: 'Eligibility-cum-ranking exam for admission to MD/MS/PG-Diploma medical courses. Date officially scheduled by NBEMS.', isVerified: true, isTentative: false }),
+    exam({ name: 'AIIMS INI-CET (Jan 2027 Session)', category: 'Medical', conductingBody: 'AIIMS New Delhi', examDate: new Date('2026-11-08'), registrationDates: { start: new Date('2026-09-01'), end: new Date('2026-10-10') }, examLevel: 'National', websiteUrl: 'https://www.aiimsexams.ac.in/', description: 'Institute of National Importance Combined Entrance Test for PG medical seats at AIIMS, PGIMER, JIPMER and NIMHANS (January 2027 session).' }),
 
-    // ---------------- University ----------------
-    {
-        name: 'CUET UG 2027', category: 'University', conductingBody: 'NTA',
-        examDate: new Date('2027-05-15'),
-        registrationDates: { start: new Date('2027-02-09'), end: new Date('2027-03-30') },
-        examLevel: 'National', websiteUrl: 'https://cuet.samarth.ac.in/',
-        description: 'Common University Entrance Test for Central Universities.',
-        materials: placeholderNotes, isTentative: true
-    },
+    // ==================== UNIVERSITY ====================
+    exam({ name: 'CUET UG 2027', category: 'University', conductingBody: 'NTA', examDate: new Date('2027-05-15'), registrationDates: { start: new Date('2027-02-09'), end: new Date('2027-03-30') }, examLevel: 'National', websiteUrl: 'https://cuet.samarth.ac.in/', description: 'Common University Entrance Test for undergraduate admission to central and participating universities.' }),
+    exam({ name: 'CUET PG 2027', category: 'University', conductingBody: 'NTA', examDate: new Date('2027-03-15'), registrationDates: { start: new Date('2026-12-20'), end: new Date('2027-01-31') }, examLevel: 'National', websiteUrl: 'https://pgcuet.samarth.ac.in/', description: 'Common University Entrance Test for postgraduate admission to central and participating universities.' }),
 
-    // ---------------- Government ----------------
-    {
-        name: 'UPSC CSE Prelims 2027', category: 'Government', conductingBody: 'UPSC',
-        examDate: new Date('2027-05-23'),
-        registrationDates: { start: new Date('2027-02-01'), end: new Date('2027-02-21') },
-        examLevel: 'National', websiteUrl: 'https://upsc.gov.in/',
-        description: 'Civil Services Examination for IAS, IPS, IFS etc.',
-        materials: placeholderNotes, isTentative: true
-    },
-    {
-        name: 'SSC CGL 2026', category: 'Government', conductingBody: 'SSC',
-        examDate: new Date('2026-09-12'),
-        registrationDates: { start: new Date('2026-05-21'), end: new Date('2026-06-25') },
-        examLevel: 'National', websiteUrl: 'https://ssc.gov.in/',
-        description: 'Combined Graduate Level Examination (Tier 1) for Group B and C posts. Notification out for 12,256 vacancies; exact Tier-1 date within the Aug–Sep 2026 window.',
-        materials: placeholderNotes, isTentative: true
-    },
-    {
-        name: 'UPSC NDA II 2026', category: 'Government', conductingBody: 'UPSC',
-        examDate: new Date('2026-09-13'),
-        registrationDates: { start: new Date('2026-05-20'), end: new Date('2026-06-11') },
-        examLevel: 'National', websiteUrl: 'https://upsc.gov.in/',
-        description: 'National Defence Academy & Naval Academy Examination (II) for Army, Navy and Air Force wings. Officially scheduled by UPSC.',
-        materials: [], isTentative: false
-    },
+    // ==================== LAW ====================
+    exam({ name: 'CLAT 2027', category: 'Law', conductingBody: 'Consortium of NLUs', examDate: new Date('2026-12-06'), registrationDates: { start: new Date('2026-08-01'), end: new Date('2026-10-31') }, examLevel: 'National', websiteUrl: 'https://consortiumofnlus.ac.in/', description: 'Common Law Admission Test for UG and PG law admissions to 25+ National Law Universities. Consortium has confirmed registration opens August 2026.' }),
+    exam({ name: 'AILET 2027', category: 'Law', conductingBody: 'NLU Delhi', examDate: new Date('2026-12-07'), registrationDates: { start: new Date('2026-08-01'), end: new Date('2026-11-15') }, examLevel: 'National', websiteUrl: 'https://nationallawuniversitydelhi.in/', description: 'All India Law Entrance Test for admission to BA LLB, LLM and PhD programmes at National Law University, Delhi.' }),
 
-    // ---------------- Management ----------------
-    {
-        name: 'CAT 2026', category: 'Management', conductingBody: 'IIMs',
-        examDate: new Date('2026-11-29'),
-        registrationDates: { start: new Date('2026-08-01'), end: new Date('2026-09-20') },
-        examLevel: 'National', websiteUrl: 'https://iimcat.ac.in/',
-        description: 'Common Admission Test for MBA admissions (expected to be conducted by IIM Indore).',
-        materials: placeholderNotes, isTentative: true
-    },
-    {
-        name: 'XAT 2027', category: 'Management', conductingBody: 'XLRI',
-        examDate: new Date('2027-01-03'),
-        registrationDates: { start: new Date('2026-07-10'), end: new Date('2026-12-05') },
-        examLevel: 'National', websiteUrl: 'https://xatonline.in/',
-        description: 'Xavier Aptitude Test for management programs.',
-        materials: placeholderNotes, isTentative: true
-    },
-    {
-        name: 'SNAP 2026', category: 'Management', conductingBody: 'Symbiosis International',
-        examDate: new Date('2026-12-06'),
-        registrationDates: { start: new Date('2026-08-01'), end: new Date('2026-11-15') },
-        examLevel: 'University', websiteUrl: 'https://www.snaptest.org/',
-        description: 'Symbiosis National Aptitude Test for MBA admissions to Symbiosis institutes. First of three test dates (06, 14 & 20 Dec 2026).',
-        materials: [], isTentative: true
-    },
+    // ==================== DESIGN ====================
+    exam({ name: 'NIFT Entrance 2027', category: 'Design', conductingBody: 'NTA / NIFT', examDate: new Date('2027-02-07'), registrationDates: { start: new Date('2026-12-01'), end: new Date('2026-12-31') }, examLevel: 'National', websiteUrl: 'https://www.nift.ac.in/', description: 'National Institute of Fashion Technology entrance exam (CAT + GAT) for B.Des and B.FTech programmes.' }),
+    exam({ name: 'NID DAT 2027', category: 'Design', conductingBody: 'NID Ahmedabad', examDate: new Date('2027-01-03'), registrationDates: { start: new Date('2026-10-01'), end: new Date('2026-11-30') }, examLevel: 'National', websiteUrl: 'https://admissions.nid.edu/', description: 'National Institute of Design — Design Aptitude Test (Prelims) for B.Des and M.Des admissions.' }),
+    exam({ name: 'UCEED 2027', category: 'Design', conductingBody: 'IIT Bombay', examDate: new Date('2027-01-18'), registrationDates: { start: new Date('2026-10-01'), end: new Date('2026-11-10') }, examLevel: 'National', websiteUrl: 'https://www.uceed.iitb.ac.in/', description: 'Undergraduate Common Entrance Exam for Design — B.Des admission to IIT Bombay, IIT Delhi, IIT Hyderabad, IIITDM and others.' }),
+    exam({ name: 'CEED 2027', category: 'Design', conductingBody: 'IIT Bombay', examDate: new Date('2027-01-18'), registrationDates: { start: new Date('2026-10-01'), end: new Date('2026-11-10') }, examLevel: 'National', websiteUrl: 'https://www.ceed.iitb.ac.in/', description: 'Common Entrance Exam for Design — M.Des and PhD (design) admission to IITs and IISc.' }),
+    exam({ name: 'NATA 2027', category: 'Design', conductingBody: 'Council of Architecture', examDate: new Date('2027-04-15'), registrationDates: { start: new Date('2027-02-01'), end: new Date('2027-03-31') }, examLevel: 'National', websiteUrl: 'https://www.nata.in/', description: 'National Aptitude Test in Architecture for admission to B.Arch programmes across India. Held in multiple sessions.' }),
 
-    // ---------------- Law ----------------
-    {
-        name: 'CLAT 2027', category: 'Law', conductingBody: 'Consortium of NLUs',
-        examDate: new Date('2026-12-06'),
-        registrationDates: { start: new Date('2026-08-01'), end: new Date('2026-10-31') },
-        examLevel: 'National', websiteUrl: 'https://consortiumofnlus.ac.in/',
-        description: 'Common Law Admission Test for NLUs. Consortium has confirmed registration opens August 2026.',
-        materials: placeholderNotes, isTentative: true
-    },
+    // ==================== GOVERNMENT / COMPETITIVE ====================
+    exam({ name: 'UPSC CSE Prelims 2027', category: 'Government', conductingBody: 'UPSC', examDate: new Date('2027-05-23'), registrationDates: { start: new Date('2027-02-01'), end: new Date('2027-02-21') }, examLevel: 'National', websiteUrl: 'https://upsc.gov.in/', description: 'Civil Services (Preliminary) Examination — the screening stage for IAS, IPS, IFS and allied services.' }),
+    exam({ name: 'UPSC CSE Mains 2026', category: 'Government', conductingBody: 'UPSC', examDate: new Date('2026-08-21'), registrationDates: { start: new Date('2026-05-24'), end: new Date('2026-06-15') }, examLevel: 'National', websiteUrl: 'https://upsc.gov.in/', description: 'Civil Services (Main) Examination for candidates who cleared the 2026 Prelims — written descriptive stage before the interview.' }),
+    exam({ name: 'UPSC NDA II 2026', category: 'Government', conductingBody: 'UPSC', examDate: new Date('2026-09-13'), registrationDates: { start: new Date('2026-05-20'), end: new Date('2026-06-11') }, examLevel: 'National', websiteUrl: 'https://upsc.gov.in/', description: 'National Defence Academy & Naval Academy Examination (II) for Army, Navy and Air Force wings. Officially scheduled by UPSC.', isVerified: true, isTentative: false }),
+    exam({ name: 'UPSC CDS II 2026', category: 'Government', conductingBody: 'UPSC', examDate: new Date('2026-09-13'), registrationDates: { start: new Date('2026-05-20'), end: new Date('2026-06-11') }, examLevel: 'National', websiteUrl: 'https://upsc.gov.in/', description: 'Combined Defence Services Examination (II) for IMA, INA, AFA and OTA. Officially scheduled by UPSC for 13 Sep 2026.', isVerified: true, isTentative: false }),
+    exam({ name: 'SSC CGL 2026', category: 'Government', conductingBody: 'SSC', examDate: new Date('2026-09-12'), registrationDates: { start: new Date('2026-05-21'), end: new Date('2026-06-25') }, examLevel: 'National', websiteUrl: 'https://ssc.gov.in/', description: 'Combined Graduate Level Examination (Tier 1) for Group B and C posts. Notification out for 12,256 vacancies; exact Tier-1 date within the Aug–Sep 2026 window.', isVerified: true, isTentative: true }),
+    exam({ name: 'SSC CHSL 2026', category: 'Government', conductingBody: 'SSC', examDate: new Date('2026-09-15'), registrationDates: { start: new Date('2026-06-01'), end: new Date('2026-07-10') }, examLevel: 'National', websiteUrl: 'https://ssc.gov.in/', description: 'Combined Higher Secondary Level (10+2) Examination for LDC, JSA, DEO and similar posts.' }),
+    exam({ name: 'SSC MTS 2026', category: 'Government', conductingBody: 'SSC', examDate: new Date('2026-10-01'), registrationDates: { start: new Date('2026-06-15'), end: new Date('2026-07-20') }, examLevel: 'National', websiteUrl: 'https://ssc.gov.in/', description: 'Multi-Tasking (Non-Technical) Staff and Havaldar Examination for Group C posts in central government departments.' }),
+    exam({ name: 'IBPS PO 2026', category: 'Government', conductingBody: 'IBPS', examDate: new Date('2026-08-22'), registrationDates: { start: new Date('2026-06-20'), end: new Date('2026-07-15') }, examLevel: 'National', websiteUrl: 'https://www.ibps.in/', description: 'Probationary Officer / Management Trainee recruitment for public sector banks. Prelims 22–23 Aug 2026, Mains 4 Oct 2026 per official IBPS calendar.', isVerified: true, isTentative: false }),
+    exam({ name: 'IBPS Clerk 2026', category: 'Government', conductingBody: 'IBPS', examDate: new Date('2026-12-05'), registrationDates: { start: new Date('2026-09-01'), end: new Date('2026-09-25') }, examLevel: 'National', websiteUrl: 'https://www.ibps.in/', description: 'Clerical cadre recruitment for public sector banks via the Common Recruitment Process.' }),
+    exam({ name: 'SBI PO 2026', category: 'Government', conductingBody: 'State Bank of India', examDate: new Date('2026-11-07'), registrationDates: { start: new Date('2026-09-01'), end: new Date('2026-09-25') }, examLevel: 'National', websiteUrl: 'https://sbi.co.in/web/careers/', description: 'State Bank of India Probationary Officer recruitment exam.' }),
+    exam({ name: 'SBI Clerk 2027', category: 'Government', conductingBody: 'State Bank of India', examDate: new Date('2027-02-13'), registrationDates: { start: new Date('2026-12-15'), end: new Date('2027-01-07') }, examLevel: 'National', websiteUrl: 'https://sbi.co.in/web/careers/', description: 'State Bank of India Junior Associate (Clerk) recruitment exam.' }),
+    exam({ name: 'RBI Grade B 2026 (Phase 2)', category: 'Government', conductingBody: 'Reserve Bank of India', examDate: new Date('2026-07-25'), registrationDates: { start: new Date('2026-04-29'), end: new Date('2026-05-20') }, examLevel: 'National', websiteUrl: 'https://www.rbi.org.in/', description: 'RBI Officer Grade B (DR) recruitment. Phase 1 held June 2026; Phase 2 officially scheduled for 25–26 July 2026.', isVerified: true, isTentative: false }),
+    exam({ name: 'SEBI Grade A 2026', category: 'Government', conductingBody: 'SEBI', examDate: new Date('2026-09-20'), registrationDates: { start: new Date('2026-07-01'), end: new Date('2026-07-31') }, examLevel: 'National', websiteUrl: 'https://www.sebi.gov.in/', description: 'Securities and Exchange Board of India Officer Grade A (Assistant Manager) recruitment exam.' }),
+    exam({ name: 'AFCAT II 2026', category: 'Government', conductingBody: 'Indian Air Force', examDate: new Date('2026-08-08'), registrationDates: { start: new Date('2026-05-20'), end: new Date('2026-06-21') }, examLevel: 'National', websiteUrl: 'https://afcat.cdac.in/', description: 'Air Force Common Admission Test (Cycle 2) for Flying and Ground Duty (Tech/Non-Tech) branches. Officially scheduled for 08 Aug 2026.', isVerified: true, isTentative: false }),
+    exam({ name: 'Indian Navy Agniveer SSR 2026', category: 'Government', conductingBody: 'Indian Navy', examDate: new Date('2026-09-05'), registrationDates: { start: new Date('2026-06-15'), end: new Date('2026-07-10') }, examLevel: 'National', websiteUrl: 'https://www.joinindiannavy.gov.in/', description: 'Indian Navy Agniveer (SSR/MR) recruitment under the Agnipath scheme — written stage followed by physical and medical tests.' }),
 
-    // ---------------- Design ----------------
-    {
-        name: 'NIFT 2027', category: 'Design', conductingBody: 'NTA',
-        examDate: new Date('2027-02-07'),
-        registrationDates: { start: new Date('2026-12-01'), end: new Date('2026-12-31') },
-        examLevel: 'National', websiteUrl: 'https://nift.ac.in/',
-        description: 'National Institute of Fashion Technology Entrance Exam.',
-        materials: placeholderNotes, isTentative: true
-    }
+    // ==================== MANAGEMENT ====================
+    exam({ name: 'CAT 2026', category: 'Management', conductingBody: 'IIMs', examDate: new Date('2026-11-29'), registrationDates: { start: new Date('2026-08-01'), end: new Date('2026-09-20') }, examLevel: 'National', websiteUrl: 'https://iimcat.ac.in/', description: 'Common Admission Test for MBA/PGP admission to the IIMs and 1,200+ B-schools. Expected on the last Sunday of November (IIM Indore conducting).' }),
+    exam({ name: 'XAT 2027', category: 'Management', conductingBody: 'XLRI', examDate: new Date('2027-01-03'), registrationDates: { start: new Date('2026-07-10'), end: new Date('2026-12-05') }, examLevel: 'National', websiteUrl: 'https://xatonline.in/', description: 'Xavier Aptitude Test for admission to XLRI and 160+ member B-schools.' }),
+    exam({ name: 'SNAP 2026', category: 'Management', conductingBody: 'Symbiosis International', examDate: new Date('2026-12-06'), registrationDates: { start: new Date('2026-08-01'), end: new Date('2026-11-15') }, examLevel: 'University', websiteUrl: 'https://www.snaptest.org/', description: 'Symbiosis National Aptitude Test for MBA admission to Symbiosis institutes. First of three test dates (06, 14 & 20 Dec 2026).' }),
+    exam({ name: 'MAT 2026 (December)', category: 'Management', conductingBody: 'AIMA', examDate: new Date('2026-12-06'), registrationDates: { start: new Date('2026-10-01'), end: new Date('2026-11-30') }, examLevel: 'National', websiteUrl: 'https://mat.aima.in/', description: 'Management Aptitude Test by AIMA, conducted four times a year (Feb/May/Sep/Dec) for MBA admission to 600+ B-schools.' }),
+    exam({ name: 'NMAT 2026', category: 'Management', conductingBody: 'GMAC', examDate: new Date('2026-11-04'), registrationDates: { start: new Date('2026-08-01'), end: new Date('2026-10-10') }, examLevel: 'National', websiteUrl: 'https://www.mba.com/exams/nmat', description: 'NMAT by GMAC for MBA admission to NMIMS and other B-schools. Conducted over a ~75-day testing window with up to three attempts.' }),
+    exam({ name: 'GMAT', category: 'Management', conductingBody: 'GMAC', examLevel: 'International', websiteUrl: 'https://www.mba.com/exams/gmat', description: 'Graduate Management Admission Test for MBA and business-master admissions worldwide. Available year-round.', isRolling: true, isTentative: false, isVerified: true, scheduleNote: 'Year-round — book a slot at a test centre or online any time.' }),
+    exam({ name: 'GRE', category: 'Management', conductingBody: 'ETS', examLevel: 'International', websiteUrl: 'https://www.ets.org/gre', description: 'Graduate Record Examination for graduate and business-school admissions abroad. Available year-round.', isRolling: true, isTentative: false, isVerified: true, scheduleNote: 'Year-round — book a slot at a test centre or take the test at home any time.' }),
+
+    // ==================== LANGUAGE ====================
+    exam({ name: 'TOEFL iBT', category: 'Language', conductingBody: 'ETS', examLevel: 'International', websiteUrl: 'https://www.ets.org/toefl', description: 'Test of English as a Foreign Language — English-proficiency test accepted for study/work abroad. Offered on many dates year-round.', isRolling: true, isTentative: false, isVerified: true, scheduleNote: 'Year-round — multiple test dates each month at centres or at home.' }),
+    exam({ name: 'IELTS', category: 'Language', conductingBody: 'British Council / IDP', examLevel: 'International', websiteUrl: 'https://www.ielts.org/', description: 'International English Language Testing System — English-proficiency test for study, work and migration. Multiple test dates each month.', isRolling: true, isTentative: false, isVerified: true, scheduleNote: 'Year-round — up to several fixed dates per month across cities.' }),
+
+    // ==================== SCHOOL LEVEL ====================
+    exam({ name: 'NTSE 2026 (Stage 1)', category: 'School', conductingBody: 'NCERT / State SCERTs', examDate: new Date('2026-11-15'), registrationDates: { start: new Date('2026-08-01'), end: new Date('2026-09-30') }, examLevel: 'State', websiteUrl: 'https://ncert.nic.in/', description: 'National Talent Search Examination for Class X students — Stage 1 conducted by states (~Nov), Stage 2 by NCERT. Verify status with your state SCERT, as the scheme has been under review.' }),
+    exam({ name: 'INSPIRE / KVPY (Scholarship)', category: 'School', conductingBody: 'DST, Govt. of India', examLevel: 'National', websiteUrl: 'https://online-inspire.gov.in/', description: 'KVPY has been discontinued and merged into the DST INSPIRE programme. INSPIRE-SHE is a scholarship for science students based on board merit/JEE/NEET rank — application-based, not a single exam.', isRolling: true, isTentative: false, scheduleNote: 'Application-based scholarship — windows announced annually on the INSPIRE portal.' }),
+    exam({ name: 'NSO 2026 (SOF)', category: 'School', conductingBody: 'Science Olympiad Foundation', examDate: new Date('2026-11-10'), registrationDates: { start: new Date('2026-07-01'), end: new Date('2026-09-30') }, examLevel: 'National', websiteUrl: 'https://www.sofworld.org/', description: 'National Science Olympiad by SOF for school students (Classes 1–12). Conducted through participating schools on set dates.' }),
+    exam({ name: 'IMO 2026 (SOF)', category: 'School', conductingBody: 'Science Olympiad Foundation', examDate: new Date('2026-12-05'), registrationDates: { start: new Date('2026-07-01'), end: new Date('2026-09-30') }, examLevel: 'National', websiteUrl: 'https://www.sofworld.org/', description: 'International Mathematics Olympiad by SOF for school students. School-level, conducted on set dates each year.' }),
+    exam({ name: 'IEO 2026 (SOF)', category: 'School', conductingBody: 'Science Olympiad Foundation', examDate: new Date('2026-10-15'), registrationDates: { start: new Date('2026-07-01'), end: new Date('2026-09-15') }, examLevel: 'National', websiteUrl: 'https://www.sofworld.org/', description: 'International English Olympiad by SOF for school students, conducted through participating schools.' }),
+    exam({ name: 'JSTSE 2026', category: 'School', conductingBody: 'Directorate of Education, Delhi', examDate: new Date('2027-01-17'), registrationDates: { start: new Date('2026-10-01'), end: new Date('2026-11-15') }, examLevel: 'State', websiteUrl: 'https://edudel.nic.in/', description: 'Junior Science Talent Search Examination for Class IX students studying in Delhi schools.' }),
+    exam({ name: 'IOQM 2026 (formerly PRMO)', category: 'School', conductingBody: 'MTA / HBCSE', examDate: new Date('2026-09-06'), registrationDates: { start: new Date('2026-07-15'), end: new Date('2026-08-20') }, examLevel: 'National', websiteUrl: 'https://olympiads.hbcse.tifr.res.in/', description: 'Indian Olympiad Qualifier in Mathematics — first stage of the Mathematical Olympiad Programme (the old PRMO), gateway to RMO.' }),
+    exam({ name: 'RMO 2026', category: 'School', conductingBody: 'MTA / HBCSE', examDate: new Date('2026-11-01'), registrationDates: { start: new Date('2026-09-10'), end: new Date('2026-10-10') }, examLevel: 'National', websiteUrl: 'https://olympiads.hbcse.tifr.res.in/', description: 'Regional Mathematical Olympiad — second stage of the Mathematical Olympiad Programme, leading to INMO.' }),
+    exam({ name: 'INMO 2027', category: 'School', conductingBody: 'HBCSE', examDate: new Date('2027-01-17'), registrationDates: { start: new Date('2026-11-15'), end: new Date('2026-12-15') }, examLevel: 'National', websiteUrl: 'https://olympiads.hbcse.tifr.res.in/', description: 'Indian National Mathematical Olympiad — selects students for the International Mathematical Olympiad training camp.' })
 ];
 
 module.exports = sampleExams;

@@ -2,9 +2,14 @@ const mongoose = require('mongoose');
 
 const ExamSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    category: { type: String, required: true, enum: ['Medical', 'Engineering', 'Government', 'Management', 'Law', 'Design', 'University', 'Other'] },
+    category: {
+        type: String,
+        required: true,
+        enum: ['Medical', 'Engineering', 'Government', 'Management', 'School', 'Law', 'Design', 'Language', 'University', 'Other']
+    },
     conductingBody: { type: String },
-    examDate: { type: Date, required: true },
+    // Optional: rolling exams (GRE/GMAT/TOEFL/IELTS) have no single date — see isRolling/scheduleNote
+    examDate: { type: Date },
     registrationDates: {
         start: Date,
         end: Date
@@ -19,6 +24,12 @@ const ExamSchema = new mongoose.Schema({
     }],
     // True when the exam date is not yet officially announced (expected/based on past cycles)
     isTentative: { type: Boolean, default: false },
+    // True only when the date was confirmed against an official source
+    isVerified: { type: Boolean, default: false },
+    // True for year-round exams with no fixed date (GRE, GMAT, TOEFL, IELTS)
+    isRolling: { type: Boolean, default: false },
+    // Human-readable schedule note, used mainly for rolling/multi-stage exams
+    scheduleNote: { type: String },
     lastUpdated: { type: Date, default: Date.now }
 }, { timestamps: true });
 
