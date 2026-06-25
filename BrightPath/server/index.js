@@ -10,7 +10,7 @@ const { scheduleScraper } = require('./scraper/examScraper');
 
 startCronJobs();       // daily exam-deadline notifications
 scheduleScraper();     // weekly scrape of official sites (Sundays 00:00)
-require('./seed/seedExams');
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
