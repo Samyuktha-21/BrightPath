@@ -17,6 +17,8 @@ const ExamSchema = new mongoose.Schema({
         link: { type: String },
         type: { type: String, enum: ['Syllabus', 'Previous Year Paper', 'Mock Test', 'Notes'] }
     }],
+    // True when the exam date is not yet officially announced (expected/based on past cycles)
+    isTentative: { type: Boolean, default: false },
     lastUpdated: { type: Date, default: Date.now }
 }, { timestamps: true });
 

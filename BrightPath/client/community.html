@@ -11,25 +11,25 @@
             max-width: 900px;
             margin: 2rem auto;
             padding: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
         }
 
         .comment-card {
-            background: rgba(0, 0, 0, 0.4);
+            background: #f7f9fc;
             padding: 1.5rem;
             border-radius: 12px;
             margin-bottom: 1rem;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.2s;
+            border: 1px solid var(--card-border);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .comment-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(255,255,255,0.3);
+            box-shadow: var(--shadow);
         }
 
         .comment-header {
@@ -46,7 +46,8 @@
         }
 
         .comment-category {
-            background: rgba(255,255,255,0.2);
+            background: var(--accent-soft);
+            color: var(--accent-color);
             padding: 0.2rem 0.6rem;
             border-radius: 4px;
             font-size: 0.8rem;
@@ -56,12 +57,12 @@
         .comment-text {
             font-size: 1rem;
             line-height: 1.5;
-            opacity: 0.9;
+            color: var(--text-color);
         }
 
         .comment-time {
             font-size: 0.8rem;
-            opacity: 0.5;
+            color: var(--text-muted);
             margin-top: 0.5rem;
         }
 
@@ -71,15 +72,16 @@
             gap: 1rem;
             margin-bottom: 2rem;
             padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid var(--card-border);
         }
 
         .post-form textarea {
             width: 100%;
             padding: 1rem;
             border-radius: 8px;
-            border: none;
-            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--card-border);
+            background: #ffffff;
+            color: var(--text-color);
             resize: vertical;
             min-height: 100px;
             font-family: inherit;
@@ -88,23 +90,25 @@
         .post-form select {
             padding: 0.8rem;
             border-radius: 8px;
-            border: none;
-            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--card-border);
+            background: #ffffff;
+            color: var(--text-color);
             font-family: inherit;
         }
-        
+
         .filter-section {
             display: flex;
             gap: 1rem;
             margin-bottom: 2rem;
             align-items: center;
         }
-        
+
         .filter-section select {
             padding: 0.5rem;
             border-radius: 8px;
-            border: none;
-            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--card-border);
+            background: #ffffff;
+            color: var(--text-color);
             font-family: inherit;
         }
     </style>
@@ -117,11 +121,11 @@
     </div>
 
     <!-- Navigation -->
-    <nav style="padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);">
-        <div class="logo" style="color: white; font-size: 1.5rem; font-weight: 700;">BrightPath</div>
+    <nav style="padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); border-bottom: 1px solid var(--card-border);">
+        <div class="logo" style="font-size: 1.5rem; font-weight: 700;">BrightPath</div>
         <div style="display: flex; gap: 1.5rem; align-items: center;">
-            <a href="dashboard.html" style="color: white; text-decoration: none; font-weight: 600; opacity: 0.8;">Dashboard</a>
-            <a href="calendar.html" style="color: white; text-decoration: none; font-weight: 600; opacity: 0.8;">Calendar</a>
+            <a href="dashboard.html" style="color: var(--text-muted); text-decoration: none; font-weight: 600;">Dashboard</a>
+            <a href="calendar.html" style="color: var(--text-muted); text-decoration: none; font-weight: 600;">Calendar</a>
             <a href="community.html" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">Community</a>
         </div>
     </nav>

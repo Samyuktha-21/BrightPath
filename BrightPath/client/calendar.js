@@ -72,11 +72,11 @@ function showExamsModal(dateString, exams) {
     
     modalDate.textContent = new Date(dateString).toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
     modalContent.innerHTML = exams.map(exam => `
-        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+        <div style="background: #f7f9fc; border: 1px solid var(--card-border); padding: 1rem; border-radius: 8px;">
             <div style="font-size: 0.8rem; color: var(--accent-color); margin-bottom: 0.2rem;">${exam.category}</div>
             <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">${exam.name}</div>
-            <p style="font-size: 0.9rem;">${exam.description || 'No description available'}</p>
-            <a href="${exam.websiteUrl}" target="_blank" style="color: white; font-size: 0.8rem; text-decoration: underline; margin-top: 0.5rem; display: inline-block;">Official Website</a>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">${exam.description || 'No description available'}</p>
+            <a href="${exam.websiteUrl}" target="_blank" style="color: var(--accent-color); font-size: 0.8rem; text-decoration: underline; margin-top: 0.5rem; display: inline-block;">Official Website</a>
         </div>
     `).join('');
     

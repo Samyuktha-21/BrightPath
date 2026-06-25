@@ -28,7 +28,7 @@ if (userStr) {
 
         userProfile.innerHTML = `
             <span style="font-weight: 600; display: none;" id="nav-username">Welcome, ${user.name}</span>
-            <button id="logout-btn" class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: rgba(255,255,255,0.2); color: white;">Logout</button>
+            <button id="logout-btn" class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--accent-soft); color: var(--accent-color);">Logout</button>
         `;
 
         navContainer.appendChild(userProfile);
@@ -235,10 +235,10 @@ function renderExams(exams) {
         let materialsHtml = '';
         if (exam.materials && exam.materials.length > 0) {
             materialsHtml = `<div class="materials-section">
-                <h4 style="margin-bottom: 0.5rem; margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 0.5rem;">📚 Study Materials</h4>
+                <h4 style="margin-bottom: 0.5rem; margin-top: 1rem; border-top: 1px solid var(--card-border); padding-top: 0.5rem;">📚 Study Materials</h4>
                 <div class="materials-list" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
                     ${exam.materials.map(m => `
-                        <a href="${m.link}" class="material-link" style="display: block; font-size: 0.85rem; padding: 0.4rem; background: rgba(0,0,0,0.2); border-radius: 4px; text-decoration: none; color: white;">
+                        <a href="${m.link}" class="material-link" style="display: block; font-size: 0.85rem; padding: 0.4rem; background: #f1f4f9; border-radius: 4px; text-decoration: none; color: var(--text-color);">
                             <span style="color: var(--accent-color); font-weight: bold;">${m.type}:</span> ${m.title}
                         </a>
                     `).join('')}
@@ -257,9 +257,9 @@ function renderExams(exams) {
             </div>
             
             <h3 class="exam-title">${exam.name}</h3>
-            <div class="exam-date">Date: ${date}</div>
+            <div class="exam-date">Date: ${date}${exam.isTentative ? ' <span title="Date not yet officially announced — expected based on past cycles" style="font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--warm); background:var(--warm-soft); padding:2px 6px; border-radius:4px; vertical-align:middle;">Tentative</span>' : ''}</div>
             
-            <div style="background: rgba(255,255,255,0.1); padding: 0.5rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; font-weight: bold; color: var(--accent-color);">
+            <div style="background: var(--accent-soft); padding: 0.5rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; font-weight: bold; color: var(--accent-color);">
                 ⏳ ${daysLeft}
             </div>
 

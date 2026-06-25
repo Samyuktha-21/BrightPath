@@ -11,7 +11,7 @@
     <div class="dashboard-container">
         <nav class="dashboard-nav">
             <div class="logo">BrightPath Calendar</div>
-            <a href="dashboard.html" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 1rem; background: rgba(255,255,255,0.2); color: white;">Back to Dashboard</a>
+            <a href="dashboard.html" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 1rem;">Back to Dashboard</a>
         </nav>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -36,8 +36,8 @@
     
     <!-- Modal for showing exams on a specific day -->
     <div id="exam-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center;">
-        <div style="background: var(--primary-color); padding: 2rem; border-radius: 16px; max-width: 500px; width: 90%; position: relative; border: 1px solid var(--card-border);">
-            <button id="close-modal" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: white; cursor: pointer;">&times;</button>
+        <div style="background: #ffffff; color: var(--text-color); padding: 2rem; border-radius: 16px; max-width: 500px; width: 90%; position: relative; border: 1px solid var(--card-border); box-shadow: var(--shadow-hover);">
+            <button id="close-modal" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
             <h3 id="modal-date" style="margin-bottom: 1rem; color: var(--accent-color);">Date</h3>
             <div id="modal-content" style="display: flex; flex-direction: column; gap: 1rem;">
                 <!-- Content injected here -->
